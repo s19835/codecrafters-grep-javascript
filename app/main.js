@@ -18,6 +18,15 @@ function matchPattern(inputLine, pattern) {
   }
 }
 
+//function to parse the pattern into a list of tokens representing character classes or literals.
+
+
+//function to check if a single character matches a pattern token.
+
+//function to iterate through the input line and the parsed pattern to check for a match.
+
+
+
 function main() {
   const pattern = process.argv[3];
   const inputLine = require("fs").readFileSync(0, "utf-8").trim();
