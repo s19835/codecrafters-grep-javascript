@@ -5,7 +5,9 @@ function matchPattern(inputLine, pattern) {
   else if (pattern === '\\d') {
     return /\d/.test(inputLine);
   }
-  
+  else if (pattern === '\\w') {
+    return /\w/.test(inputLine);
+  }
   else {
     throw new Error(`Unhandled pattern ${pattern}`);
   }
@@ -19,9 +21,6 @@ function main() {
     console.log("Expected first argument to be '-E'");
     process.exit(1);
   }
-
-  
-  console.log("Logs from your program will appear here");
 
 
   if (matchPattern(inputLine, pattern)) {
