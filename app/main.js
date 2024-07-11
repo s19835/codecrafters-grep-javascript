@@ -1,23 +1,3 @@
-function matchPattern(inputLine, pattern) {
-  if (pattern.length === 1) {
-    return inputLine.includes(pattern);
-  } 
-  else if (pattern === '\\d') {
-    return /\d/.test(inputLine);
-  }
-  else if (pattern === '\\w') {
-    return /\w/.test(inputLine);
-  }
-  else if (pattern.startsWith('[') && pattern.endsWith(']')) {
-    const charGroup = pattern.slice(1, -1);
-    const charCheck = new RegExp(`[${charGroup}]`);
-    return charCheck.test(inputLine);
-  }
-  else {
-    throw new Error(`Unhandled pattern ${pattern}`);
-  }
-}
-
 //function to parse the pattern into a list of tokens representing character classes or literals.
 function parsePattern(pattern) {
   const tokens = [];
@@ -52,9 +32,43 @@ function parsePattern(pattern) {
 }
 
 //function to check if a single character matches a pattern token.
+function matchChar(char, token) {
+  if (token.length === 1) {
+    return char.includes(token);
+  } 
+  else if (token === '\\d') {
+    return /\d/.test(char);
+  }
+  else if (token === '\\w') {
+    return /\w/.test(char);
+  }
+  else if (token.startsWith('[') && token.endsWith(']')) {
+    const charGroup = token.slice(1, -1);
+    return new RegExp(`[${charGroup}]`).test(char);
+  }
+  else {
+    return char === token;
+  }
+}
 
 //function to iterate through the input line and the parsed pattern to check for a match.
+function matchPattern(inputLine, pattern) {
+  const tokens = parsePattern(pattern);
+  let inputIndex = 0;
+  let tokenIndex = 0;
 
+  while (inputIndex < inputLine.length && tokenIndex < tokens.length) {
+    if (matchChar(inputLine[inputIndex], tokens[tokenIndex])) {
+      inputIndex++;
+      tokenIndex++;
+    } else {
+      inputIndex++;
+      tokenIndex = 0;
+    }
+  }
+
+  return tokenIndex === tokens.length;
+}
 
 function main() {
   const pattern = process.argv[3];
