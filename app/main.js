@@ -8,6 +8,11 @@ function matchPattern(inputLine, pattern) {
   else if (pattern === '\\w') {
     return /\w/.test(inputLine);
   }
+  else if (pattern.startsWith('[') && pattern.endsWith(']')) {
+    const charGroup = pattern.slice(1, -1);
+    const charCheck = new RegExp(`[${charGroup}]`);
+    return charCheck.test(inputLine);
+  }
   else {
     throw new Error(`Unhandled pattern ${pattern}`);
   }
