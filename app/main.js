@@ -58,6 +58,9 @@ function matchPattern(inputLine, pattern) {
   let tokenIndex = 0;
 
   // If the pattern starts with ^
+  const startsWithAnchor = tokens[0] === '^';
+  // If the pattern ends with $
+  const endsWithAnchor = tokens[tokens.length - 1] === '$';
   if (tokens[0] === '^') {
     tokens.shift();
     if (!matchChar(inputLine[inputIndex], tokens[tokenIndex])) {
