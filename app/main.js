@@ -61,7 +61,8 @@ function matchPattern(inputLine, pattern) {
   const startsWithAnchor = tokens[0] === '^';
   // If the pattern ends with $
   const endsWithAnchor = tokens[tokens.length - 1] === '$';
-  if (tokens[0] === '^') {
+
+  if (startsWithAnchor) {
     tokens.shift();
     if (!matchChar(inputLine[inputIndex], tokens[tokenIndex])) {
       return false;
@@ -69,6 +70,11 @@ function matchPattern(inputLine, pattern) {
     inputIndex++;
     tokenIndex++;
   }
+
+  if (endsWithAnchor) {
+    tokens.pop();
+  }
+
   while (inputIndex < inputLine.length && tokenIndex < tokens.length) {
     if (matchChar(inputLine[inputIndex], tokens[tokenIndex])) {
       inputIndex++;
@@ -82,7 +88,8 @@ function matchPattern(inputLine, pattern) {
     }
   }
 
-  return tokenIndex === tokens.length;
+  if (endsWithAnchor) return (inputIndex === inputLine.length && tokenIndex === tokens.length);
+  else return tokenIndex === tokens.length;
 }
 
 function main() {
