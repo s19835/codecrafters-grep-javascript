@@ -57,11 +57,23 @@ function matchPattern(inputLine, pattern) {
   let inputIndex = 0;
   let tokenIndex = 0;
 
+  // If the pattern starts with ^
+  if (tokens[0] === '^') {
+    tokens.shift();
+    if (!matchChar(inputLine[inputIndex], tokens[tokenIndex])) {
+      return false;
+    }
+    inputIndex++;
+    tokenIndex++;
+  }
   while (inputIndex < inputLine.length && tokenIndex < tokens.length) {
     if (matchChar(inputLine[inputIndex], tokens[tokenIndex])) {
       inputIndex++;
       tokenIndex++;
     } else {
+      if (tokens.includes('^')) {
+        return false; // If the '^' anchor is present and characters don't match, return false
+      }
       inputIndex++;
       tokenIndex = 0;
     }
