@@ -41,7 +41,10 @@ function parsePattern(pattern) {
 
 //function to check if a single character matches a pattern token.
 function matchChar(char, token) {
-  if (token.length === 1) {
+  if (token === '.') {
+    return true;        // match any single char
+  }
+  else if (token.length === 1) {
     return char.includes(token);
   } 
   else if (token === '\\d') {
