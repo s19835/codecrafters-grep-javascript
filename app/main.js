@@ -22,11 +22,11 @@ function parsePattern(pattern) {
       tokens.push(pattern.slice(i, j+1));
       i = j+1;
     }
-    else if (pattern[i] === '+'){
+    else if (pattern[i] === '+' || pattern[i] === '?'){
       if (tokens.length === 0) {
         throw new Error(`Invalid '+' quantifier at start of pattern: ${pattern}`);
       } else {
-        tokens[tokens.length-1] += '+';
+        tokens[tokens.length-1] += pattern[i];
         i++;
       }
     }
@@ -57,6 +57,10 @@ function matchChar(char, token) {
   else if (token.endsWith('+')) {
     const baseToken = token.slice(0, -1);
     return matchChar(char, baseToken);
+  }
+  else if (token.endsWith('?')) {
+    const baseToken = token.slice(0, -1);
+    return char === '' || matchChar(char, baseToken);
   }
   else {
     return char === token;
@@ -97,6 +101,13 @@ function matchPattern(inputLine, pattern) {
       }
       if (matchCount === 0) {
         return false; // If no matches found for a '+' quantifier, return false
+      }
+      tokenIndex++;
+    }
+    else if (tokens[tokenIndex].endsWith('?')) {
+      const baseToken = tokens[tokenIndex].slice(0, -1);
+      if (matchChar(inputLine[inputIndex], baseToken)) {
+        inputIndex++;
       }
       tokenIndex++;
     }
